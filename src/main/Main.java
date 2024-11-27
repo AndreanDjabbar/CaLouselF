@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	public Main() {
-		
+		System.out.println("Test");
 	}
 
 	public static void main(String[] args) {
