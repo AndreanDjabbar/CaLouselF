@@ -7,6 +7,7 @@ public class Main extends Application {
 
 	public Main() {
 		System.out.println("Test");
+		System.out.println("Test Branch");
 	}
 
 	public static void main(String[] args) {
