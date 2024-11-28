@@ -1,0 +1,22 @@
+services:
+  calouseif-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: calouseif_db
+      MYSQL_USER: calouseif           
+      MYSQL_PASSWORD: calouseif12   
+      MYSQL_ROOT_PASSWORD: calouseif12
+    ports:
+      - "3310:3306"
+    volumes:
+      - calouseif_db_data:/var/lib/mysql
+    networks:
+      - calouseif_network
+
+volumes:
+  calouseif_db_data:  # Definisi volume untuk data MySQL
+
+networks:
+  calouseif_network:  # Definisi jaringan Docker
+    driver: bridge

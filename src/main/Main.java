@@ -1,13 +1,18 @@
 package main;
 
+import java.sql.PreparedStatement;
+
+import controllers.UserController;
+import database.Database;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import models.User;
+import views.RegisterView;
 
 public class Main extends Application {
 
 	public Main() {
-		System.out.println("Test");
-		System.out.println("Test Branch");
+		
 	}
 
 	public static void main(String[] args) {
@@ -17,7 +22,8 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.show();
-	}
+		RegisterView registerView = new RegisterView();
+        registerView.show(primaryStage);
+    }
 
 }
