@@ -29,7 +29,16 @@ public class HomeView {
             	new UploadItemView().show(primaryStage);
             });
         }
-
+        
+        if (role.equalsIgnoreCase("admin")) {
+            Button approveItemButton = new Button("Approve Item Request");
+            vbox.getChildren().add(approveItemButton);
+            
+            approveItemButton.setOnAction(e -> {
+                new ApproveItemView().show(primaryStage);
+            });
+        }
+        
         Button logoutButton = new Button("Logout");
         vbox.getChildren().add(logoutButton);
 

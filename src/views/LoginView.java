@@ -62,7 +62,7 @@ public class LoginView {
 
             UserController userController = new UserController();
             String result = userController.userLogin(username, password);
-
+            System.out.println(result);
             if (result.equalsIgnoreCase("Login successful")) {
                 errorLabel.setText("Login successful!");
                 errorLabel.setTextFill(Color.GREEN); 

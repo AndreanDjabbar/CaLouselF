@@ -25,9 +25,9 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 //		RegisterView registerView = new RegisterView();
 //        registerView.show(primaryStage);
-        
-        BuyerPage test = new BuyerPage();
-        test.start(primaryStage);
+		
+		BuyerPage test = new BuyerPage();
+		test.start(primaryStage);
     }
 
 }
