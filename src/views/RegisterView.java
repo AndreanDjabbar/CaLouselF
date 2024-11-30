@@ -62,6 +62,13 @@ public class RegisterView {
         errorLabel.setTextFill(Color.RED);
         grid.add(errorLabel, 1, 7);
 
+        Hyperlink loginLink = new Hyperlink("Already have an account? Login");
+        grid.add(loginLink, 1, 8);
+
+        loginLink.setOnAction(event -> {
+            new LoginView().show(primaryStage);
+        });
+
         submitButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
@@ -70,7 +77,7 @@ public class RegisterView {
             String role = sellerRadio.isSelected() ? "seller" : buyerRadio.isSelected() ? "buyer" : "";
 
             errorLabel.setText("");
-
+            
             String usernameError = UserValidator.validateUsername(username);
             String passwordError = UserValidator.validatePassword(password);
             String phoneError = UserValidator.validatePhoneNumber(phoneNumber);
@@ -101,12 +108,13 @@ public class RegisterView {
                 errorLabel.setText(roleError);
                 return;
             }
-
             UserController userController = new UserController();
             String result = userController.registerUser(username, password, phoneNumber, address, role);
 
             if (result.equalsIgnoreCase("Username Already Exist")) {
                 errorLabel.setText(result);
+
+                loginLink.setVisible(true);
 
                 PauseTransition pause = new PauseTransition(Duration.seconds(3));
                 pause.setOnFinished(event -> new LoginView().show(primaryStage));
