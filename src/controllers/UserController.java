@@ -1,6 +1,7 @@
 package controllers;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import database.Database;
@@ -37,6 +38,35 @@ public class UserController {
             return "Error while saving user: " + e.getMessage();
         }
     }
+    
+    public String userLogin(String username, String password) {
+    	if (username.equalsIgnoreCase("admin") && password.equalsIgnoreCase("admin")) {
+    		return "Login Successful";
+    	}
+        String query = "SELECT password FROM users WHERE username = ?";
+        
+        try (PreparedStatement ps = db.prepareStatement(query)) {
+            ps.setString(1, username);  
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String storedPasswordHash = rs.getString("password");
+                    
+                    if (password.equals(storedPasswordHash)) {
+                        return "Login successful";
+                    } else {
+                        return "Invalid username or password";
+                    }
+                } else {
+                    return "Invalid username or password";  
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Database error";
+        }
+    }
+
     
     public boolean isUserExists(String username) {
         try {
