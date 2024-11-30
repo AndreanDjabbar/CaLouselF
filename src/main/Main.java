@@ -7,6 +7,7 @@ import database.Database;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import models.User;
+import views.BuyerPage;
 import views.RegisterView;
 
 public class Main extends Application {
@@ -22,8 +23,11 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		RegisterView registerView = new RegisterView();
-        registerView.show(primaryStage);
+//		RegisterView registerView = new RegisterView();
+//        registerView.show(primaryStage);
+        
+        BuyerPage test = new BuyerPage();
+        test.start(primaryStage);
     }
 
 }
