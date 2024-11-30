@@ -3,6 +3,7 @@ package views;
 import controllers.UserController;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -15,32 +16,33 @@ public class RegisterView {
 
     public void show(Stage primaryStage) {
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(10);
-        grid.setHgap(10);
+        grid.setPadding(new Insets(20)); 
+        grid.setVgap(10); 
+        grid.setHgap(10);  
+        grid.setAlignment(Pos.CENTER); 
 
         Label usernameLabel = new Label("Username:");
-        grid.add(usernameLabel, 0, 0);
         TextField usernameField = new TextField();
         usernameField.setPromptText("Enter username");
+        grid.add(usernameLabel, 0, 0);
         grid.add(usernameField, 1, 0);
 
         Label passwordLabel = new Label("Password:");
-        grid.add(passwordLabel, 0, 1);
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Enter password");
+        grid.add(passwordLabel, 0, 1);
         grid.add(passwordField, 1, 1);
 
         Label phoneLabel = new Label("Phone Number:");
-        grid.add(phoneLabel, 0, 2);
         TextField phoneField = new TextField();
         phoneField.setPromptText("+62XXXXXXXXX");
+        grid.add(phoneLabel, 0, 2);
         grid.add(phoneField, 1, 2);
 
         Label addressLabel = new Label("Address:");
-        grid.add(addressLabel, 0, 3);
         TextField addressField = new TextField();
         addressField.setPromptText("Enter address");
+        grid.add(addressLabel, 0, 3);
         grid.add(addressField, 1, 3);
 
         Label roleLabel = new Label("Role:");
@@ -76,8 +78,8 @@ public class RegisterView {
             String address = addressField.getText();
             String role = sellerRadio.isSelected() ? "seller" : buyerRadio.isSelected() ? "buyer" : "";
 
-            errorLabel.setText("");
-            
+            errorLabel.setText(""); 
+
             String usernameError = UserValidator.validateUsername(username);
             String passwordError = UserValidator.validatePassword(password);
             String phoneError = UserValidator.validatePhoneNumber(phoneNumber);
@@ -88,26 +90,23 @@ public class RegisterView {
                 errorLabel.setText(usernameError);
                 return;
             }
-
             if (passwordError != null) {
                 errorLabel.setText(passwordError);
                 return;
             }
-
             if (phoneError != null) {
                 errorLabel.setText(phoneError);
                 return;
             }
-
             if (addressError != null) {
                 errorLabel.setText(addressError);
                 return;
             }
-
             if (roleError != null) {
                 errorLabel.setText(roleError);
                 return;
             }
+
             UserController userController = new UserController();
             String result = userController.registerUser(username, password, phoneNumber, address, role);
 
@@ -130,7 +129,7 @@ public class RegisterView {
             }
         });
 
-        Scene scene = new Scene(grid, 400, 400);
+        Scene scene = new Scene(grid, 400, 450);
         primaryStage.setTitle("Register");
         primaryStage.setScene(scene);
         primaryStage.show();
