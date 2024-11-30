@@ -79,4 +79,42 @@ public class UserController {
             return false;
         }
     }
+    
+    public String getRoleByUsername(String username) {
+    	String query = "SELECT role FROM users WHERE username = ?";
+        
+        try (PreparedStatement ps = db.prepareStatement(query)) {
+            ps.setString(1, username);  
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("role");
+                } else {
+                    return null; 
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public int getIdByUsername(String username) {
+        String query = "SELECT id FROM users WHERE username = ?";
+
+        try (PreparedStatement ps = db.prepareStatement(query)) {
+            ps.setString(1, username);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                } else {
+                    return -1; 
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; 
+        }
+    }
 }

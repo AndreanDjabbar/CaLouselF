@@ -15,8 +15,8 @@ services:
       - calouseif_network
 
 volumes:
-  calouseif_db_data:  # Definisi volume untuk data MySQL
+  calouseif_db_data:  
 
 networks:
-  calouseif_network:  # Definisi jaringan Docker
+  calouseif_network:  
     driver: bridge

@@ -8,16 +8,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import utils.SessionManager;
-import validators.UserValidator;
 import javafx.scene.control.Hyperlink;
+import javafx.geometry.Pos;
 
 public class LoginView {
 
     public void show(Stage primaryStage) {
+        
         GridPane grid = new GridPane();
         grid.setVgap(10);
         grid.setHgap(10);
@@ -44,9 +46,19 @@ public class LoginView {
         Hyperlink registerLink = new Hyperlink("Don't have an account? Register here.");
         grid.add(registerLink, 1, 4);
 
+        VBox vbox = new VBox(20);  
+        vbox.setAlignment(Pos.CENTER); 
+        vbox.getChildren().add(grid);
+
         loginButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
+
+            if (username.isEmpty() || password.isEmpty()) {
+                errorLabel.setText("Please enter both username and password.");
+                errorLabel.setTextFill(Color.RED);
+                return;
+            }
 
             UserController userController = new UserController();
             String result = userController.userLogin(username, password);
@@ -55,8 +67,11 @@ public class LoginView {
                 errorLabel.setText("Login successful!");
                 errorLabel.setTextFill(Color.GREEN); 
                 SessionManager.getInstance().setUsername(username);
+
                 PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                pause.setOnFinished(event -> new HomeView().show(primaryStage));
+                pause.setOnFinished(event -> {
+                    new HomeView().show(primaryStage);
+                });
                 pause.play();
             } else {
                 errorLabel.setText(result);  
@@ -64,12 +79,11 @@ public class LoginView {
             }
         });
 
-        
         registerLink.setOnAction(event -> {
             new RegisterView().show(primaryStage);  
         });
 
-        Scene scene = new Scene(grid, 400, 200);
+        Scene scene = new Scene(vbox, 400, 300); 
         primaryStage.setTitle("Login");
         primaryStage.setScene(scene);
         primaryStage.show();

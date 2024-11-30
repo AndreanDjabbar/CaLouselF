@@ -1,5 +1,6 @@
 package views;
 
+import controllers.UserController;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,12 +13,22 @@ public class HomeView {
     public void show(Stage primaryStage) {
         VBox vbox = new VBox(10);
         vbox.setStyle("-fx-padding: 20;");
+        UserController userController = new UserController();
 
-        
-        String username = (String) SessionManager.getInstance().getUsername();
+        String username = SessionManager.getInstance().getUsername();
+        String role = userController.getRoleByUsername(username);
 
         Label welcomeLabel = new Label("Welcome, " + username + "!");
         vbox.getChildren().add(welcomeLabel);
+        
+        if (role.equalsIgnoreCase("seller")) {
+            Button uploadItemButton = new Button("Upload Item");
+            vbox.getChildren().add(uploadItemButton);
+            
+            uploadItemButton.setOnAction(e -> {
+            	new UploadItemView().show(primaryStage);
+            });
+        }
 
         Button logoutButton = new Button("Logout");
         vbox.getChildren().add(logoutButton);
