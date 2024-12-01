@@ -5,6 +5,7 @@ import java.util.List;
 
 import controllers.ItemController;
 import controllers.UserController;
+import controllers.WishlistController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,8 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Item;
 import utils.SessionManager;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
@@ -25,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class BuyerItemView extends Application {
 
     private ItemController itemController;
+    private WishlistController wishlistController;
     private ObservableList<Item> data;
     private TableView<Item> itemList;
     private Button backButton;
@@ -34,11 +38,7 @@ public class BuyerItemView extends Application {
     @Override
     public void start(Stage primaryStage) {
         initComponents();
-        configureLayout();
-
-        UserController userController = new UserController();
-        String username = SessionManager.getInstance().getUsername();
-        userRole = userController.getRoleByUsername(username);  
+        configureLayout(); 
 
         configureActions(primaryStage);
         primaryStage.setScene(scene);
@@ -48,6 +48,7 @@ public class BuyerItemView extends Application {
 
     private void initComponents() {
         itemController = new ItemController();
+        wishlistController = new WishlistController();
         List<Item> items = itemController.getAllItems();
         data = FXCollections.observableArrayList(items);
 
@@ -73,14 +74,11 @@ public class BuyerItemView extends Application {
 
         TableColumn<Item, Void> actionCol = new TableColumn<>("Actions");
         actionCol.setPrefWidth(300);  
-
         actionCol.setCellFactory(createActionButtons());
 
         itemList.getColumns().addAll(itemName, itemCategory, itemSize, itemPrice, actionCol);
         itemList.setItems(data);
     }
-
-
 
     private Callback<TableColumn<Item, Void>, TableCell<Item, Void>> createActionButtons() {
         return param -> new TableCell<>() {
@@ -90,13 +88,9 @@ public class BuyerItemView extends Application {
             private final HBox buttonGroup = new HBox(5, purchase, offer, addWishlist);
 
             {
-                if ("buyer".equals(userRole)) {
-                    purchase.setOnAction(e -> handlePurchase(getCurrentItem()));
-                    offer.setOnAction(e -> handleOffer(getCurrentItem()));
-                    addWishlist.setOnAction(e -> handleWishlist(getCurrentItem()));
-                } else {
-                    buttonGroup.getChildren().clear();
-                }
+                purchase.setOnAction(e -> handlePurchase(getCurrentItem()));
+                offer.setOnAction(e -> handleOffer(getCurrentItem()));
+                addWishlist.setOnAction(e -> handleWishlist(getCurrentItem()));
             }
 
             @Override
@@ -124,9 +118,29 @@ public class BuyerItemView extends Application {
     }
 
     private void handleWishlist(Item item) {
-        System.out.println("Added to wishlist: " + item.getItemName());
-    }
+        UserController userController = new UserController();
+        String username = SessionManager.getInstance().getUsername();
+        int userId = userController.getIdByUsername(username);
 
+        String result = wishlistController.addToWishlist(item.getItemId(), userId);
+        
+        if (result.equals("Item successfully added to wishlist!")) {
+            showAlert(AlertType.INFORMATION, "Success", result);
+        } else if (result.equals("Item already in wishlist!")) {
+            showAlert(AlertType.WARNING, "Warning", result);
+        } else {
+            showAlert(AlertType.ERROR, "Error", result);
+        }
+    }
+    
+    private void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
     private BorderPane createMainLayout() {
         BorderPane border = new BorderPane();
         border.setTop(backButton);
@@ -136,13 +150,13 @@ public class BuyerItemView extends Application {
         return border;
     }
 
-
     private void configureLayout() {
         
     }
 
     private void configureActions(Stage primaryStage) {
         backButton.setOnAction(e -> {
+        	new HomeView().show(primaryStage);
             System.out.println("Navigating back to Home...");
         });
     }
