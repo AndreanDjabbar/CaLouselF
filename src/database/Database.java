@@ -69,8 +69,8 @@ public class Database {
                 + "seller_id INT NOT NULL, "
                 + "FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE)";
         
-        String createItemsTable = "CREATE TABLE IF NOT EXISTs items ("
-                + "itemId INT AUTO_INCREMENT PRIMARY KEY, "
+        String createItemsTable = "CREATE TABLE IF NOT EXISTS items ("
+                + "item_id INT AUTO_INCREMENT PRIMARY KEY, "
                 + "item_name VARCHAR(100) NOT NULL, "
                 + "item_size VARCHAR(100), "
                 + "item_price DECIMAL(10, 2) NOT NULL, "
@@ -90,11 +90,19 @@ public class Database {
                 + "seller_id INT NOT NULL, "
                 + "FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE)";
         
+        String wishlistsTable = "CREATE TABLE IF NOT EXISTS wishlists ("
+                + "wishlist_id INT AUTO_INCREMENT PRIMARY KEY, "
+                + "user_id INT NOT NULL, "
+                + "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE, "
+        		+ "item_id INT NOT NULL, "
+        		+ "FOREIGN KEY (item_id) REFERENCES items(item_id) ON DELETE CASCADE)";
+        
         try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(createUsersTable);
             stmt.executeUpdate(createItemsQueueTable);
             stmt.executeUpdate(createItemsTable);
             stmt.executeUpdate(rejectedItemsTable);
+            stmt.executeUpdate(wishlistsTable);
         } catch (SQLException e) {
             e.printStackTrace();
         }
