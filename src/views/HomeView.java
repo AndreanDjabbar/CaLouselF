@@ -39,6 +39,12 @@ public class HomeView {
             });
         }
         
+        Button viewItemButton = new Button ("View item");
+        vbox.getChildren().add(viewItemButton);
+        viewItemButton.setOnAction(e->{
+        	new ViewItemView().start(primaryStage);
+        });
+        
         Button logoutButton = new Button("Logout");
         vbox.getChildren().add(logoutButton);
 

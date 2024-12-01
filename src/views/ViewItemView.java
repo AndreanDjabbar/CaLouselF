@@ -9,7 +9,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.ItemQueue;
@@ -27,19 +29,24 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class BuyerPage extends Application{
-	
+public class ViewItemView extends Application{
+		
 	ItemController itemController;
 	List<ItemQueue> items;
     ObservableList<ItemQueue> data;
 	Scene scene;
 	BorderPane border;
 	MenuBar menuBar;
-	Menu viewItem, wishlist, history;
 	ScrollPane scroll;
 	TableView<ItemQueue> itemList;
+	Button backButton;
+	GridPane grid;
 	
 	public void init() {
+		
+		grid = new GridPane();
+		
+		backButton = new Button("Back");
 		
 		itemController = new ItemController();
 		
@@ -52,32 +59,24 @@ public class BuyerPage extends Application{
 		
 		menuBar = new MenuBar();
 		
-		viewItem = new Menu("View Item"); 
-		wishlist = new Menu("Wishlist"); 
-		history = new Menu("History"); 
+		scene = new Scene(border,600,400);
 		
-		scene = new Scene(border,800,800);
-		
-		itemList = new TableView<>();
-		
-		
-		
-		
+		itemList = new TableView<>();	
 		
 	}
 	
 	public void setTable() {
 		TableColumn<ItemQueue, String> itemName = new TableColumn<>("Name");
-		itemName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+		itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
 		
 		TableColumn<ItemQueue, String> itemCategory = new TableColumn<>("Category");
-		itemCategory.setCellValueFactory(new PropertyValueFactory<>("Category"));
+		itemCategory.setCellValueFactory(new PropertyValueFactory<>("itemCategory"));
 		
 		TableColumn<ItemQueue, String> itemSize = new TableColumn<>("Size");
-		itemSize.setCellValueFactory(new PropertyValueFactory<>("Size"));
+		itemSize.setCellValueFactory(new PropertyValueFactory<>("itemSize"));
 		
 		TableColumn<ItemQueue, BigDecimal> itemPrice = new TableColumn<>("Price");
-		itemPrice.setCellValueFactory(new PropertyValueFactory<>("Price"));
+		itemPrice.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
 		
 		TableColumn<ItemQueue, Void> actionCol = new TableColumn<>("Actions");
 		
@@ -86,13 +85,11 @@ public class BuyerPage extends Application{
 	                @Override
 	                public TableCell<ItemQueue, Void> call(final TableColumn<ItemQueue, Void> param) {
 	                    return new TableCell<ItemQueue, Void>() {
-	                    	
-	                    	
 
 	                        private final Button purchase = new Button("Buy");
 	                        private final Button offer = new Button("Make Offer");
 	                        private final Button addWishlist = new Button("Add to Wishlist");
-	                        private final HBox buttonGroup = new HBox(10, purchase, offer, addWishlist);
+	                        private final HBox buttonGroup = new HBox(5, purchase, offer, addWishlist);
 
 	                        {
 	                            purchase.setOnAction(e -> {
@@ -107,6 +104,9 @@ public class BuyerPage extends Application{
 	                            
 	                            addWishlist.setOnAction(e -> {
 	                            	ItemQueue selectedItem = getTableView().getItems().get(getIndex());
+	                            	
+	                            	
+	                            	
 	                            });
 	                        }
 
@@ -125,15 +125,13 @@ public class BuyerPage extends Application{
 	            
 	            actionCol.setCellFactory(cellFactory);
 	            itemList.getColumns().addAll(itemName, itemCategory, itemSize, itemPrice, actionCol);
+	            itemList.setItems(data);
 	}
 	
 	public void layout() {
-		border.setTop(menuBar);
-		border.setCenter(scroll);
-		
-		scroll.setContent(itemList);
-		
-		menuBar.getMenus().addAll(viewItem,wishlist,history);
+		border.setTop(backButton);
+//		scroll.setContent(itemList);
+		border.setCenter(itemList);
 		
 	}
 	
@@ -143,11 +141,13 @@ public class BuyerPage extends Application{
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
+	public void start(Stage primaryStage){
 		init();
 		setTable();
 		layout();
+		backButton.setOnAction(e ->{
+			new HomeView().show(primaryStage);
+		});
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Item View");
 		primaryStage.show();
