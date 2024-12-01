@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.Database;
+import models.Item;
 import models.ItemQueue;
 
 public class ItemController {
@@ -36,13 +37,36 @@ public class ItemController {
         }
     }
 	
-	public List<ItemQueue> getAllItems() {
+	public List<ItemQueue> getAllItemsQueue() {
         List<ItemQueue> items = new ArrayList<>();
         String query = "SELECT * FROM itemsQueue";
         
         try (ResultSet rs = Database.getInstance().prepareStatement(query).executeQuery()) {
             while (rs.next()) {
                 ItemQueue item = new ItemQueue(
+                    rs.getInt("item_id"),
+                    rs.getInt("seller_id"),
+                    rs.getString("item_name"),
+                    rs.getString("item_size"),
+                    rs.getBigDecimal("item_price"),
+                    rs.getString("item_category")
+                );
+                items.add(item);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return items;
+    }
+	
+	public List<Item> getAllItems() {
+        List<Item> items = new ArrayList<>();
+        String query = "SELECT * FROM items";
+        
+        try (ResultSet rs = Database.getInstance().prepareStatement(query).executeQuery()) {
+            while (rs.next()) {
+                Item item = new Item(
                     rs.getInt("item_id"),
                     rs.getInt("seller_id"),
                     rs.getString("item_name"),

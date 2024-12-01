@@ -38,12 +38,14 @@ public class HomeView {
                 new ApproveItemView().show(primaryStage);
             });
         }
-        
-        Button viewItemButton = new Button ("View item");
-        vbox.getChildren().add(viewItemButton);
-        viewItemButton.setOnAction(e->{
-        	new ViewItemView().start(primaryStage);
-        });
+        if (role.equalsIgnoreCase("buyer")) {
+        	Button BuyerviewItemButton = new Button ("View item");
+        	vbox.getChildren().add(BuyerviewItemButton);
+        	
+        	BuyerviewItemButton.setOnAction(e->{
+        		new BuyerItemView().start(primaryStage);
+        	});
+        }
         
         Button logoutButton = new Button("Logout");
         vbox.getChildren().add(logoutButton);
