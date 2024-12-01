@@ -24,7 +24,7 @@ public class ApproveItemView {
 
     public void show(Stage primaryStage) {
         ItemController itemController = new ItemController();
-        List<ItemQueue> items = itemController.getAllItems(); 
+        List<ItemQueue> items = itemController.getAllItemsQueue(); 
         ObservableList<ItemQueue> data = FXCollections.observableArrayList(items);
 
         TableView<ItemQueue> tableView = new TableView<>(data);
