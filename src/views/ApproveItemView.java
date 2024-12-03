@@ -100,6 +100,11 @@ public class ApproveItemView {
         VBox vBox = new VBox(10, tableView);
 
         Scene scene = new Scene(vBox, 600, 400);
+        
+        Button backBtn = new Button("Back");
+        backBtn.setOnAction(event -> {
+        	new HomeView().show(primaryStage);
+        });
         primaryStage.setTitle("Approve Items");
         primaryStage.setScene(scene);
         primaryStage.show();

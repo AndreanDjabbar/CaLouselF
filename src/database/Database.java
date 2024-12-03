@@ -8,9 +8,9 @@ import java.sql.Statement;
 
 public class Database {
 
-    private String USERNAME = "calouseif";
-    private String HOST = "localhost:3310";
-    private String PASSWORD = "calouseif12";
+    private String USERNAME = "root";
+    private String HOST = "localhost:3306";
+    private String PASSWORD = "";
     private String DB = "calouseif_db";
     private String URL = String.format(
             "jdbc:mysql://%s/%s",

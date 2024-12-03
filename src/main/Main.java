@@ -8,7 +8,7 @@ import database.Database;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import models.User;
-import views.ViewItemView;
+import views.ApproveItemView;
 import views.RegisterView;
 import views.UploadItemView;
 
@@ -25,8 +25,8 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		RegisterView registerView = new RegisterView();
-        registerView.show(primaryStage);
+		ApproveItemView test = new ApproveItemView();
+		test.show(primaryStage);
 		
 //		ItemController test = new ItemController();
 //		test.uploadItemToQueue(1, "test", "test", "test", "test");
