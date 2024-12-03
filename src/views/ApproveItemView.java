@@ -29,7 +29,7 @@ public class ApproveItemView {
 
         TableView<ItemQueue> tableView = new TableView<>(data);
 
-        TableColumn<ItemQueue, String> itemNameCol = new TableColumn<>("Item Name");
+        TableColumn<ItemQueue, String> itemNameCol = new TableColumn<>("Name");
         itemNameCol.setCellValueFactory(new PropertyValueFactory<>("itemName"));
 
         TableColumn<ItemQueue, String> itemSizeCol = new TableColumn<>("Size");

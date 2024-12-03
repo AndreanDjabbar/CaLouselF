@@ -28,6 +28,14 @@ public class HomeView {
             uploadItemButton.setOnAction(e -> {
             	new UploadItemView().show(primaryStage);
             });
+            
+            Button viewSellItemButton = new Button("Edit/Remove Item");
+            vbox.getChildren().add(viewSellItemButton);
+            
+            viewSellItemButton.setOnAction(e ->{
+            	new SellerItemView().start(primaryStage);
+            });
+            
         }
         
         if (role.equalsIgnoreCase("admin")) {
