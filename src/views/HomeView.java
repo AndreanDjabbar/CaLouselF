@@ -53,6 +53,13 @@ public class HomeView {
         	BuyerviewItemButton.setOnAction(e->{
         		new BuyerItemView().start(primaryStage);
         	});
+        	
+        	Button BuyerviewWishlistButton = new Button ("View Wishlists");
+        	vbox.getChildren().add(BuyerviewWishlistButton);
+        	
+        	BuyerviewWishlistButton.setOnAction(e->{
+        		new WishlistView().show(primaryStage);
+        	});
         }
         
         Button logoutButton = new Button("Logout");
