@@ -3,8 +3,12 @@ package controllers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import database.Database;
+import models.Item;
+import models.WishlistItem;
 
 public class WishlistController {
 
@@ -45,4 +49,51 @@ public class WishlistController {
             return "Error while saving Item: " + e.getMessage();
         }
     }
+    
+    public List<WishlistItem> getWishlistsByUserId(int userId) {
+        String query = "SELECT w.wishlist_id, i.item_name, i.item_size, i.item_price, i.item_category " +
+                       "FROM wishlists w " +
+                       "JOIN items i ON w.item_id = i.item_id " +
+                       "WHERE w.user_id = ?";
+        List<WishlistItem> wishlistItems = new ArrayList<>();
+
+        try (PreparedStatement ps = db.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    WishlistItem item = new WishlistItem(
+                        rs.getInt("wishlist_id"),
+                        rs.getString("item_name"),
+                        rs.getString("item_size"),
+                        rs.getDouble("item_price"),
+                        rs.getString("item_category")
+                    );
+                    wishlistItems.add(item);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return wishlistItems;
+    }
+
+
+    
+    public String removeWishlist(int wishlistId) {
+        String query = "DELETE FROM wishlists WHERE wishlist_id = ?";
+        
+        try (PreparedStatement ps = db.prepareStatement(query)) {
+            ps.setInt(1, wishlistId);
+            int rowsDeleted = ps.executeUpdate();
+            
+            if (rowsDeleted > 0) {
+                return "successfully removed from wishlist!";
+            } else {
+                return "Error: Wishlist item not found.";
+            }
+        } catch (SQLException e) {
+            return "Error while removing item: " + e.getMessage();
+        }
+    }
+
 }
