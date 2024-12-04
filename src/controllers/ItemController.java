@@ -134,6 +134,71 @@ public class ItemController {
 
         return item;
     }
+	public Item getItemById(int itemId) {
+		String query = "SELECT * FROM items WHERE item_id = ?";
+		Item item = null;
+		
+		try (PreparedStatement ps = db.prepareStatement(query)) {
+			ps.setInt(1, itemId);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					item = new Item(
+							rs.getInt("item_id"),
+							rs.getInt("seller_id"),
+							rs.getString("item_name"),
+							rs.getString("item_size"),
+							rs.getBigDecimal("item_price"),
+							rs.getString("item_category")
+							);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return item;
+	}
+	
+	public String updateItem(Item newItem) {
+	    String query = "UPDATE items SET item_name = ?, item_size = ?, item_price = ?, item_category = ? WHERE item_id = ?";
+	    
+	    try (PreparedStatement ps = db.prepareStatement(query)) {
+	        ps.setString(1, newItem.getItemName());
+	        ps.setString(2, newItem.getItemSize());
+	        ps.setBigDecimal(3, newItem.getItemPrice());
+	        ps.setString(4, newItem.getItemCategory());
+	        ps.setInt(5, newItem.getItemId());
+	        
+	        int rowsUpdated = ps.executeUpdate();
+	        if (rowsUpdated > 0) {
+	            return "Success: Item updated!";
+	        } else {
+	            return "Error: Item not found or no changes made.";
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return "Error: Failed to update item due to a database error.";
+	    }
+	}
+	
+	public String deleteItem(int itemId) {
+	    String query = "DELETE FROM items WHERE item_id = ?";
+	    
+	    try (PreparedStatement ps = db.prepareStatement(query)) {
+	        ps.setInt(1, itemId);
+	        
+	        int rowsDeleted = ps.executeUpdate();
+	        if (rowsDeleted > 0) {
+	            return "Success: Item with ID " + itemId + " has been deleted.";
+	        } else {
+	            return "Error: Item with ID " + itemId + " not found.";
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return "Error: Failed to delete item due to a database error.";
+	    }
+	}
+
 	
 	public void approveItem(ItemQueue newItem) {
 	    String insertQuery = "INSERT INTO items (seller_id, item_name, item_size, item_price, item_category, item_status) "
