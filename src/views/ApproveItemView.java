@@ -26,6 +26,10 @@ public class ApproveItemView {
         ItemController itemController = new ItemController();
         List<ItemQueue> items = itemController.getAllItemsQueue(); 
         ObservableList<ItemQueue> data = FXCollections.observableArrayList(items);
+        Button backBtn = new Button("Back");
+        backBtn.setOnAction(event -> {
+        	new HomeView().show(primaryStage);
+        });
 
         TableView<ItemQueue> tableView = new TableView<>(data);
 
@@ -93,18 +97,13 @@ public class ApproveItemView {
                     };
                 }
             };
-
         actionCol.setCellFactory(cellFactory);
         tableView.getColumns().addAll(itemNameCol, itemSizeCol, priceCol, actionCol);
 
-        VBox vBox = new VBox(10, tableView);
+        VBox vBox = new VBox(10, backBtn, tableView);
 
         Scene scene = new Scene(vBox, 600, 400);
         
-        Button backBtn = new Button("Back");
-        backBtn.setOnAction(event -> {
-        	new HomeView().show(primaryStage);
-        });
         primaryStage.setTitle("Approve Items");
         primaryStage.setScene(scene);
         primaryStage.show();

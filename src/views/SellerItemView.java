@@ -3,6 +3,7 @@ package views;
 import java.util.List;
 
 import controllers.ItemController;
+import controllers.UserController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,12 +22,17 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Item;
 import models.ItemQueue;
+import utils.SessionManager;
 
 public class SellerItemView extends Application{
 
 	public void start(Stage primaryStage) {
         ItemController itemController = new ItemController();
-        List<Item> items = itemController.getAllItems(); 
+        UserController userController = new UserController();
+        String username = SessionManager.getInstance().getUsername();
+        int userId = userController.getIdByUsername(username);
+        
+        List<Item> items = itemController.getSellerItems(userId);
         ObservableList<Item> data = FXCollections.observableArrayList(items);
 
         TableView<Item> tableView = new TableView<>(data);
@@ -87,14 +93,15 @@ public class SellerItemView extends Application{
         actionCol.setCellFactory(cellFactory);
         tableView.getColumns().addAll(itemNameCol,itemCategoryCol, itemSizeCol, priceCol, actionCol);
 
-        VBox vBox = new VBox(10, tableView);
-
-        Scene scene = new Scene(vBox, 600, 400);
-        
         Button backBtn = new Button("Back");
         backBtn.setOnAction(event -> {
         	new HomeView().show(primaryStage);
         });
+        
+        VBox vBox = new VBox(10, backBtn, tableView);
+
+        Scene scene = new Scene(vBox, 600, 400);
+        
         primaryStage.setTitle("Edit/Remove Items");
         primaryStage.setScene(scene);
         primaryStage.show();

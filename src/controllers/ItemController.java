@@ -83,6 +83,33 @@ public class ItemController {
         return items;
     }
 	
+	public List<Item> getSellerItems(int seller_id) {
+	    List<Item> items = new ArrayList<>();
+	    String query = "SELECT * FROM items WHERE seller_id = ?";
+
+	    try (PreparedStatement pstmt = Database.getInstance().prepareStatement(query)) {
+	        pstmt.setInt(1, seller_id); 
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                Item item = new Item(
+	                    rs.getInt("item_id"),
+	                    rs.getInt("seller_id"),
+	                    rs.getString("item_name"),
+	                    rs.getString("item_size"),
+	                    rs.getBigDecimal("item_price"),
+	                    rs.getString("item_category")
+	                );
+	                items.add(item);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return items;
+	}
+
+	
 	public ItemQueue getItemQueueById(int itemId) {
         String query = "SELECT * FROM itemsQueue WHERE item_id = ?";
         ItemQueue item = null;

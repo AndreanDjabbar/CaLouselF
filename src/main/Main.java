@@ -2,6 +2,7 @@ package main;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import views.LoginView;
 import views.SellerItemView;
 
 public class Main extends Application {
@@ -17,15 +18,14 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		SellerItemView test = new SellerItemView();
-		test.start(primaryStage);
 		
+		LoginView defaultStart = new LoginView();
+		defaultStart.show(primaryStage);
 //		ItemController test = new ItemController();
 //		test.uploadItemToQueue(1, "test", "test", "test", "test");
 //		
 //		BuyerPage test1 = new BuyerPage();
 //		test1.start(primaryStage);
-		
 		
     }
 
