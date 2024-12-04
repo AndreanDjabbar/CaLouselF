@@ -24,6 +24,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class BuyerItemView extends Application {
@@ -157,8 +158,65 @@ public class BuyerItemView extends Application {
     
 
     private void handleOffer(Item item) {
-        System.out.println("Offer made for: " + item.getItemName());
+        UserController userController = new UserController();
+        TransactionController transactionController = new TransactionController();
+        WishlistController wishlistController = new WishlistController();
+        ItemController itemController = new ItemController();
+
+        String username = SessionManager.getInstance().getUsername();
+        int userId = userController.getIdByUsername(username);
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Make an Offer");
+        dialog.setHeaderText("Offer for " + item.getItemName());
+        dialog.setContentText("Enter your offer price:");
+
+        BigDecimal highestOfferValue = transactionController.getHighestOffer(userId, item.getItemId());
+        if (highestOfferValue == null) {
+            highestOfferValue = BigDecimal.ZERO;
+        }
+
+        final BigDecimal finalHighestOffer = highestOfferValue;
+        String highestOfferMessage = (finalHighestOffer.compareTo(BigDecimal.ZERO) > 0)
+            ? "Current highest offer: " + finalHighestOffer
+            : "No offers yet.";
+
+        dialog.setHeaderText("Offer for " + item.getItemName() + "\n" + highestOfferMessage);
+
+        dialog.showAndWait().ifPresent(offerPrice -> {
+            try {
+                BigDecimal offer = new BigDecimal(offerPrice);
+
+                if (offer.compareTo(finalHighestOffer) <= 0) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Offer",
+                        "Your offer must be higher than the current highest offer (" + finalHighestOffer + ").");
+                    return;
+                }
+
+                boolean hasExistingOffer = transactionController.hasExistingOffer(userId, item.getItemId());
+                String result;
+                
+                if (hasExistingOffer) {
+                    result = transactionController.updateOffer(userId, item.getItemId(), offer);
+                } else {
+                    result = transactionController.makeOffer(userId, item.getSellerId(), item.getItemId(), offer);
+                }
+
+                if (result.contains("successfully")) {
+                    showAlert(Alert.AlertType.INFORMATION, "Success",
+                        "Your offer of " + offer + " for " + item.getItemName() + " has been recorded.");
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Error", result);
+                }
+
+            } catch (NumberFormatException e) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid numeric value for the offer.");
+            }
+        });
     }
+
+
+
+
 
     private void handleWishlist(Item item) {
         UserController userController = new UserController();
