@@ -97,12 +97,26 @@ public class Database {
         		+ "item_id INT NOT NULL, "
         		+ "FOREIGN KEY (item_id) REFERENCES items(item_id) ON DELETE CASCADE)";
         
+        String transactionsTable = "CREATE TABLE IF NOT EXISTS transactions ("
+                + "transaction_id INT AUTO_INCREMENT PRIMARY KEY, "
+                + "user_id INT NOT NULL, "
+                + "seller_id INT NOT NULL, "
+                + "item_id INT NOT NULL, "
+                + "item_name VARCHAR(255) NOT NULL, "
+                + "item_size VARCHAR(100) NOT NULL, "
+                + "item_category VARCHAR(100) NOT NULL, "
+                + "item_price DECIMAL(10, 2) NOT NULL"
+                + ");";
+
+        
+        
         try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(createUsersTable);
             stmt.executeUpdate(createItemsQueueTable);
             stmt.executeUpdate(createItemsTable);
             stmt.executeUpdate(rejectedItemsTable);
             stmt.executeUpdate(wishlistsTable);
+            stmt.executeUpdate(transactionsTable);
         } catch (SQLException e) {
             e.printStackTrace();
         }

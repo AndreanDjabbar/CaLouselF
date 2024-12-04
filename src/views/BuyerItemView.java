@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import controllers.ItemController;
+import controllers.TransactionController;
 import controllers.UserController;
 import controllers.WishlistController;
 import javafx.application.Application;
@@ -49,7 +50,7 @@ public class BuyerItemView extends Application {
     private void initComponents() {
         itemController = new ItemController();
         wishlistController = new WishlistController();
-        List<Item> items = itemController.getAllItems();
+        List<Item> items = itemController.getAllExistItems();
         data = FXCollections.observableArrayList(items);
 
         itemList = new TableView<>();
@@ -110,8 +111,50 @@ public class BuyerItemView extends Application {
     }
 
     private void handlePurchase(Item item) {
+        UserController userController = new UserController();
+        TransactionController transactionController = new TransactionController();
+        WishlistController wishlistController = new WishlistController();
+        ItemController itemController = new ItemController();
+
+        String username = SessionManager.getInstance().getUsername();
+        int userId = userController.getIdByUsername(username);
+
+        String transactionResult = transactionController.recordTransactions(userId, item.getSellerId(), item.getItemId(), item.getItemName(), item.getItemSize(), item.getItemPrice(), item.getItemCategory());
+
+        if ("Transaction recorded successfully!".equals(transactionResult)) {
+            wishlistController.removeItemFromWishlist(userId, item.getItemId());
+
+            String purchasedResult = itemController.purchasedItem(item.getItemId());
+            if ("Item status successfully updated to 'purchased'.".equals(purchasedResult)) {
+                showAlert("Transaction Status", "Purchase Successful", 
+                          "You have successfully purchased: " + item.getItemName());
+                refreshItemList();
+            } else {
+                showAlert("Purchase Failed", "Error updating item status", purchasedResult);
+            }
+        } else {
+            showAlert("Transaction Failed", "Purchase Failed", "Error: " + transactionResult);
+        }
+
         System.out.println("Purchased: " + item.getItemName());
     }
+
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+
+
+    private void refreshItemList() {
+        List<Item> updatedItems = itemController.getAllExistItems();
+        data.setAll(updatedItems); 
+        itemList.setItems(data);   
+    }
+    
 
     private void handleOffer(Item item) {
         System.out.println("Offer made for: " + item.getItemName());

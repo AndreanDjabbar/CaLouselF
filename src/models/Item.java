@@ -10,17 +10,19 @@ public class Item {
     private String itemSize;         
     private BigDecimal itemPrice;    
     private String itemCategory;     
+    private String itemStatus;
 
     public Item() {
     }
 
-    public Item(int itemId, int sellerId, String itemName, String itemSize, BigDecimal itemPrice, String itemCategory) {
+    public Item(int itemId, int sellerId, String itemName, String itemSize, BigDecimal itemPrice, String itemCategory, String itemStatus) {
     	this.itemId = itemId;
         this.sellerId = sellerId;
         this.itemName = itemName;
         this.itemSize = itemSize;
         this.itemPrice = itemPrice;
         this.itemCategory = itemCategory;
+        this.itemStatus = itemStatus;
     }
     
     public int getItemId() {return itemId; }
@@ -29,7 +31,16 @@ public class Item {
     public BigDecimal getItemPrice() { return itemPrice; }
     public String getItemCategory() { return itemCategory; }
     
-    public void setItemId(int itemId) {
+    
+    public String getItemStatus() {
+		return itemStatus;
+	}
+
+	public void setItemStatus(String itemStatus) {
+		this.itemStatus = itemStatus;
+	}
+
+	public void setItemId(int itemId) {
 		this.itemId = itemId;
 	}
 

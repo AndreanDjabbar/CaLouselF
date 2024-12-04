@@ -72,7 +72,8 @@ public class ItemController {
                     rs.getString("item_name"),
                     rs.getString("item_size"),
                     rs.getBigDecimal("item_price"),
-                    rs.getString("item_category")
+                    rs.getString("item_category"),
+                    rs.getString("item_status")
                 );
                 items.add(item);
             }
@@ -82,6 +83,29 @@ public class ItemController {
         
         return items;
     }
+	public List<Item> getAllExistItems() {
+		List<Item> items = new ArrayList<>();
+		String query = "SELECT * FROM items where item_status = 'exist'";
+		
+		try (ResultSet rs = Database.getInstance().prepareStatement(query).executeQuery()) {
+			while (rs.next()) {
+				Item item = new Item(
+						rs.getInt("item_id"),
+						rs.getInt("seller_id"),
+						rs.getString("item_name"),
+						rs.getString("item_size"),
+						rs.getBigDecimal("item_price"),
+						rs.getString("item_category"),
+						rs.getString("item_status")
+						);
+				items.add(item);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return items;
+	}
 	
 	public List<Item> getSellerItems(int seller_id) {
 	    List<Item> items = new ArrayList<>();
@@ -97,7 +121,8 @@ public class ItemController {
 	                    rs.getString("item_name"),
 	                    rs.getString("item_size"),
 	                    rs.getBigDecimal("item_price"),
-	                    rs.getString("item_category")
+	                    rs.getString("item_category"),
+	                    rs.getString("item_status")
 	                );
 	                items.add(item);
 	            }
@@ -148,7 +173,8 @@ public class ItemController {
 							rs.getString("item_name"),
 							rs.getString("item_size"),
 							rs.getBigDecimal("item_price"),
-							rs.getString("item_category")
+							rs.getString("item_category"),
+							rs.getString("item_status")
 							);
 				}
 			}
@@ -246,5 +272,25 @@ public class ItemController {
 	    }
 	}
 	
-	
+	public String purchasedItem(int itemId) {
+	    String updateItemStatusQuery = "UPDATE items SET item_status = 'purchased' WHERE item_id = ?";
+
+	    try (PreparedStatement psUpdate = db.prepareStatement(updateItemStatusQuery)) {
+	        psUpdate.setInt(1, itemId);
+
+	        int affectedRows = psUpdate.executeUpdate();
+	        
+	        if (affectedRows > 0) {
+	            System.out.println("Item " + itemId + " status has been updated to 'purchased'.");
+	            return "Item status successfully updated to 'purchased'.";
+	        } else {
+	            return "Item with the provided ID not found.";
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return "An error occurred while updating the item status.";
+	    }
+	}
+
 }
