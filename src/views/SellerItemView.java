@@ -46,6 +46,9 @@ public class SellerItemView extends Application {
 
         TableColumn<Item, Double> priceCol = new TableColumn<>("Price");
         priceCol.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
+        
+        TableColumn<Item, Double> statusCol = new TableColumn<>("Status");
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("itemStatus"));
 
         TableColumn<Item, Void> actionCol = new TableColumn<>("Actions");
 
@@ -104,7 +107,7 @@ public class SellerItemView extends Application {
                 };
 
         actionCol.setCellFactory(cellFactory);
-        tableView.getColumns().addAll(itemNameCol, itemCategoryCol, itemSizeCol, priceCol, actionCol);
+        tableView.getColumns().addAll(itemNameCol, itemCategoryCol, itemSizeCol, priceCol, statusCol, actionCol);
 
         Button backBtn = new Button("Back");
         backBtn.setOnAction(event -> {

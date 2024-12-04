@@ -95,5 +95,25 @@ public class WishlistController {
             return "Error while removing item: " + e.getMessage();
         }
     }
+    
+    public void removeItemFromWishlist(int userId, int itemId) {
+        String query = "DELETE FROM wishlists WHERE user_id = ? AND item_id = ?";
+        
+        try (PreparedStatement ps = db.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, itemId);
+            
+            int rowsDeleted = ps.executeUpdate();
+            
+            if (rowsDeleted > 0) {
+                System.out.println("Item successfully removed from wishlist!");
+            } else {
+                System.out.println("Warning: Wishlist item not found for this user.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while removing item: " + e.getMessage());
+        }
+    }
+
 
 }
