@@ -107,6 +107,18 @@ public class Database {
                 + "item_category VARCHAR(100) NOT NULL, "
                 + "item_price DECIMAL(10, 2) NOT NULL"
                 + ");";
+        
+        String offersTable = "CREATE TABLE IF NOT EXISTS offers ("
+                + "offer_id INT AUTO_INCREMENT PRIMARY KEY, "
+                + "user_id INT NOT NULL, "
+                + "seller_id INT NOT NULL, "
+                + "item_id INT NOT NULL, "
+                + "offer_price DECIMAL(10, 2) DEFAULT 0, "
+                + "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE, "
+                + "FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE, "
+                + "FOREIGN KEY (item_id) REFERENCES items(item_id) ON DELETE CASCADE"
+                + ");";
+
 
         
         
@@ -117,6 +129,7 @@ public class Database {
             stmt.executeUpdate(rejectedItemsTable);
             stmt.executeUpdate(wishlistsTable);
             stmt.executeUpdate(transactionsTable);
+            stmt.executeUpdate(offersTable);
         } catch (SQLException e) {
             e.printStackTrace();
         }
