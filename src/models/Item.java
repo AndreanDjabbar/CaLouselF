@@ -28,5 +28,30 @@ public class Item {
     public String getItemSize() { return itemSize; }
     public BigDecimal getItemPrice() { return itemPrice; }
     public String getItemCategory() { return itemCategory; }
-    public int getSellerId() { return sellerId; }
+    
+    public void setItemId(int itemId) {
+		this.itemId = itemId;
+	}
+
+	public void setSellerId(int sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	public void setItemSize(String itemSize) {
+		this.itemSize = itemSize;
+	}
+
+	public void setItemPrice(BigDecimal itemPrice) {
+		this.itemPrice = itemPrice;
+	}
+
+	public void setItemCategory(String itemCategory) {
+		this.itemCategory = itemCategory;
+	}
+
+	public int getSellerId() { return sellerId; }
 }
