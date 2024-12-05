@@ -36,6 +36,13 @@ public class HomeView {
             	new SellerItemView().start(primaryStage);
             });
             
+            Button viewOffersButton = new Button("View Offers");
+            vbox.getChildren().add(viewOffersButton);
+            
+            viewOffersButton.setOnAction(e ->{
+            	new OfferView().show(primaryStage);
+            });
+            
         }
         
         if (role.equalsIgnoreCase("admin")) {

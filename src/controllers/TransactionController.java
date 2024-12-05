@@ -4,8 +4,13 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import database.Database;
+import models.Item;
+import models.ItemQueue;
+import models.Offer;
 
 public class TransactionController {
 	private Database db;
@@ -93,6 +98,86 @@ public class TransactionController {
             return "Failed to update offer: " + e.getMessage();
         }
         return "Failed to update offer."; 
+    }
+    
+    public List<Offer> getAllSellerOffers(int sellerId) {
+        List<Offer> offers = new ArrayList<>();
+        String query = "SELECT o.offer_id, o.user_id, o.seller_id, o.item_id, o.offer_price, "
+                        + "u.username AS buyer_name, i.item_name, i.item_price AS item_price "
+                        + "FROM offers o "
+                        + "JOIN users u ON o.user_id = u.id "
+                        + "JOIN items i ON o.item_id = i.item_id "
+                        + "WHERE o.seller_id = ?";
+        
+        try (PreparedStatement ps = db.prepareStatement(query)) {
+            ps.setInt(1, sellerId);  
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Offer offer = new Offer(
+                    rs.getInt("offer_id"),
+                    rs.getInt("user_id"),
+                    rs.getInt("seller_id"),
+                    rs.getInt("item_id"),
+                    rs.getBigDecimal("offer_price")
+                );
+
+                offer.setBuyerName(rs.getString("buyer_name"));
+                offer.setItemName(rs.getString("item_name"));
+                offer.setItemPrice(rs.getBigDecimal("item_price"));
+
+                offers.add(offer);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching offers: " + e.getMessage());
+        }
+        return offers;
+    }
+
+
+    
+    public String declineOfferItem(Item targetItem, String reason, int userId) {
+        String insertQuery = "INSERT INTO itemsRejected (item_name, item_size, item_price, item_category, seller_id, reason) "
+                + "SELECT item_name, item_size, ?, item_category, seller_id, ? "
+                + "FROM items WHERE item_id = ?";
+        String deleteQuery = "DELETE FROM offers WHERE item_id = ? AND user_id = ?";
+
+        try (PreparedStatement psInsert = db.prepareStatement(insertQuery);
+             PreparedStatement psDelete = db.prepareStatement(deleteQuery)) {
+
+            psInsert.setBigDecimal(1, targetItem.getItemPrice());  
+            psInsert.setString(2, reason);     
+            psInsert.setInt(3, targetItem.getItemId());  
+
+            psInsert.executeUpdate();
+
+            psDelete.setInt(1, targetItem.getItemId());  
+            psDelete.setInt(2, userId);  
+
+            psDelete.executeUpdate();
+
+            return "Item " + targetItem.getItemId() + " successfully declined and moved to itemsRejected.";
+        } catch (SQLException e) {
+            return "Error declining item: " + e.getMessage();
+        }
+    }
+    
+    public String deleteOffer(int item_id, int user_id) {
+        String deleteQuery = "DELETE FROM offers WHERE item_id = ? AND user_id = ?";
+        try (PreparedStatement psDelete = db.prepareStatement(deleteQuery)) {
+            psDelete.setInt(1, item_id);  
+            psDelete.setInt(2, user_id);  
+
+            int rowsAffected = psDelete.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return "Item " + item_id + " successfully deleting offer ";
+            } else {
+                return "No item found with the given item_id and user_id.";
+            }
+        } catch (SQLException e) {
+            return "Error deleting offer: " + e.getMessage();
+        }
     }
 
 }
