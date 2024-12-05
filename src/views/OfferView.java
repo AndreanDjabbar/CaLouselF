@@ -90,8 +90,9 @@ public class OfferView {
                         item.getItemId(),
                         item.getItemName(),
                         item.getItemSize(),
-                        selectedOffer.getOfferPrice(),
-                        item.getItemCategory()
+                        item.getItemPrice(),
+                        item.getItemCategory(),
+                        selectedOffer.getOfferPrice()
                     );
 
                     if (!transactionResult.contains("successfully")) {

@@ -11,6 +11,7 @@ import database.Database;
 import models.Item;
 import models.ItemQueue;
 import models.Offer;
+import models.TransactionHistory;
 
 public class TransactionController {
 	private Database db;
@@ -19,9 +20,9 @@ public class TransactionController {
         db = Database.getInstance();
     }
     
-    public String recordTransactions(int userId, int sellerId, int itemId, String itemName, String itemSize, BigDecimal itemPrice, String itemCategory) {
-        String query = "INSERT INTO transactions (user_id, seller_id, item_id, item_name, item_size, item_price, item_category) "
-                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public String recordTransactions(int userId, int sellerId, int itemId, String itemName, String itemSize, BigDecimal itemPrice, String itemCategory, BigDecimal totalPaid) {
+        String query = "INSERT INTO transactions (user_id, seller_id, item_id, item_name, item_size, item_price, item_category, total_paid) "
+                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement ps = db.prepareStatement(query)) {
             ps.setInt(1, userId);
@@ -31,6 +32,7 @@ public class TransactionController {
             ps.setString(5, itemSize);      
             ps.setBigDecimal(6, itemPrice); 
             ps.setString(7, itemCategory);
+            ps.setBigDecimal(8, totalPaid); 
             
             ps.executeUpdate();
             return "Transaction recorded successfully!";
@@ -178,6 +180,37 @@ public class TransactionController {
         } catch (SQLException e) {
             return "Error deleting offer: " + e.getMessage();
         }
+    }
+    
+    public List<TransactionHistory> getTransactionHistory(int userId) {
+        List<TransactionHistory> historyList = new ArrayList<>();
+        String query = "SELECT t.transaction_id, u.username AS seller_name, i.item_name, "
+                       + "i.item_size, i.item_price, i.item_category, "
+                       + "t.total_paid AS total_paid "
+                       + "FROM transactions t "
+                       + "JOIN users u ON t.seller_id = u.id "
+                       + "JOIN items i ON t.item_id = i.item_id "
+                       + "WHERE t.user_id = ?"; 
+        
+        try (PreparedStatement ps = db.prepareStatement(query)) {
+            ps.setInt(1, userId);  
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TransactionHistory history = new TransactionHistory(
+                    rs.getInt("transaction_id"),
+                    rs.getString("seller_name"),
+                    rs.getString("item_name"),
+                    rs.getString("item_size"),
+                    rs.getBigDecimal("item_price"),
+                    rs.getString("item_category"),
+                    rs.getBigDecimal("total_paid")
+                );
+                historyList.add(history);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching transaction history: " + e.getMessage());
+        }
+        return historyList;
     }
 
 }
