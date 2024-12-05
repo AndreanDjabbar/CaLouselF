@@ -120,7 +120,7 @@ public class BuyerItemView extends Application {
         String username = SessionManager.getInstance().getUsername();
         int userId = userController.getIdByUsername(username);
 
-        String transactionResult = transactionController.recordTransactions(userId, item.getSellerId(), item.getItemId(), item.getItemName(), item.getItemSize(), item.getItemPrice(), item.getItemCategory());
+        String transactionResult = transactionController.recordTransactions(userId, item.getSellerId(), item.getItemId(), item.getItemName(), item.getItemSize(), item.getItemPrice(), item.getItemCategory(), item.getItemPrice());
 
         if ("Transaction recorded successfully!".equals(transactionResult)) {
             wishlistController.removeItemFromWishlist(userId, item.getItemId());

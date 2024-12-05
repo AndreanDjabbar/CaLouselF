@@ -105,6 +105,7 @@ public class Database {
                 + "item_name VARCHAR(255) NOT NULL, "
                 + "item_size VARCHAR(100) NOT NULL, "
                 + "item_category VARCHAR(100) NOT NULL, "
+                + "total_paid DECIMAL(10,2) NOT NULL, "
                 + "item_price DECIMAL(10, 2) NOT NULL"
                 + ");";
         

@@ -67,6 +67,13 @@ public class HomeView {
         	BuyerviewWishlistButton.setOnAction(e->{
         		new WishlistView().show(primaryStage);
         	});
+        	
+        	Button historyButton = new Button ("View Transaction History");
+        	vbox.getChildren().add(historyButton);
+        	
+        	historyButton.setOnAction(e->{
+        		new TransactionHistoryView().show(primaryStage);;
+        	});
         }
         
         Button logoutButton = new Button("Logout");
