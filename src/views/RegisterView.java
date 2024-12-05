@@ -72,6 +72,7 @@ public class RegisterView {
         });
 
         submitButton.setOnAction(e -> {
+
             String username = usernameField.getText();
             String password = passwordField.getText();
             String phoneNumber = phoneField.getText();

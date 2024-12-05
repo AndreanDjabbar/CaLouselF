@@ -62,16 +62,16 @@ public class BuyerItemView extends Application {
     }
 
     private void createTableColumns() {
-        TableColumn<Item, String> itemName = new TableColumn<>("Name");
+        TableColumn<Item, String> itemName = new TableColumn<>("Item Name");
         itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
 
-        TableColumn<Item, String> itemCategory = new TableColumn<>("Category");
+        TableColumn<Item, String> itemCategory = new TableColumn<>("Item Category");
         itemCategory.setCellValueFactory(new PropertyValueFactory<>("itemCategory"));
 
-        TableColumn<Item, String> itemSize = new TableColumn<>("Size");
+        TableColumn<Item, String> itemSize = new TableColumn<>("Item Size");
         itemSize.setCellValueFactory(new PropertyValueFactory<>("itemSize"));
 
-        TableColumn<Item, BigDecimal> itemPrice = new TableColumn<>("Price");
+        TableColumn<Item, BigDecimal> itemPrice = new TableColumn<>("Item Price");
         itemPrice.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
 
         TableColumn<Item, Void> actionCol = new TableColumn<>("Actions");

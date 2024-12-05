@@ -91,7 +91,7 @@ public class WishlistView {
         	new HomeView().show(primaryStage);;
         });
         
-        tableView.getColumns().addAll(itemNameCol, itemSizeCol, itemPriceCol, itemCategoryCol, actionCol);
+        tableView.getColumns().addAll(itemNameCol, itemCategoryCol, itemSizeCol, itemPriceCol, actionCol);
 
         VBox vbox = new VBox(backBtn, tableView);
         Scene scene = new Scene(vbox, 600, 400);

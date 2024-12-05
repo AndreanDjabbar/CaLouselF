@@ -41,6 +41,9 @@ public class TransactionHistoryView {
         
         TableColumn<TransactionHistory, String> itemCategoryCol = new TableColumn<>("Item Category");
         itemCategoryCol.setCellValueFactory(new PropertyValueFactory<>("itemCategory"));
+        
+        TableColumn<TransactionHistory, String> itemSizeCol = new TableColumn<>("Item Size");
+        itemSizeCol.setCellValueFactory(new PropertyValueFactory<>("itemSize"));
 
         TableColumn<TransactionHistory, BigDecimal> itemPriceCol = new TableColumn<>("Item Price");
         itemPriceCol.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
@@ -48,7 +51,7 @@ public class TransactionHistoryView {
         TableColumn<TransactionHistory, BigDecimal> totalPaidCol = new TableColumn<>("Total Paid");
         totalPaidCol.setCellValueFactory(new PropertyValueFactory<>("totalPaid"));
 
-        tableView.getColumns().addAll(transactionIdCol, sellerNameCol, itemNameCol, itemCategoryCol, itemPriceCol, totalPaidCol);
+        tableView.getColumns().addAll(transactionIdCol, sellerNameCol, itemNameCol, itemCategoryCol, itemSizeCol, itemPriceCol, totalPaidCol);
 
         Button backBtn = new Button("Back");
         backBtn.setOnAction(event -> new HomeView().show(primaryStage));

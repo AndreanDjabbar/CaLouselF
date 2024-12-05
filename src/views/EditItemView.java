@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -22,12 +23,22 @@ public class EditItemView {
     public void show(Stage primaryStage, int itemId) {
         ItemController itemController = new ItemController();
         Item itemTarget = itemController.getItemById(itemId);
+        
+        BorderPane border = new BorderPane();
+    	Button backBTN = new Button("Back");
+    	backBTN.setOnAction(e -> {
+    		new SellerItemView().start(primaryStage);
+    	});
+    	
+    	border.setTop(backBTN);
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(20));
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setAlignment(Pos.CENTER);
+        
+        border.setCenter(grid);
 
         Label nameLabel = new Label("Item Name:");
         TextField nameField = new TextField(itemTarget.getItemName()); // Pre-fill data
@@ -114,7 +125,7 @@ public class EditItemView {
             }
         });
 
-        Scene scene = new Scene(grid, 400, 300);
+        Scene scene = new Scene(border, 400, 300);
         primaryStage.setTitle("Edit Item");
         primaryStage.setScene(scene);
         primaryStage.show();

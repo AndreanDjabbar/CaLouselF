@@ -33,13 +33,16 @@ public class ApproveItemView {
 
         TableView<ItemQueue> tableView = new TableView<>(data);
 
-        TableColumn<ItemQueue, String> itemNameCol = new TableColumn<>("Name");
+        TableColumn<ItemQueue, String> itemNameCol = new TableColumn<>("Item Name");
         itemNameCol.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        
+        TableColumn<ItemQueue, String> itemCategoryCol = new TableColumn<>("Item Category");
+        itemCategoryCol.setCellValueFactory(new PropertyValueFactory<>("itemCategory"));
 
-        TableColumn<ItemQueue, String> itemSizeCol = new TableColumn<>("Size");
+        TableColumn<ItemQueue, String> itemSizeCol = new TableColumn<>("Item Size");
         itemSizeCol.setCellValueFactory(new PropertyValueFactory<>("itemSize"));
 
-        TableColumn<ItemQueue, Double> priceCol = new TableColumn<>("Price");
+        TableColumn<ItemQueue, Double> priceCol = new TableColumn<>("Item Price");
         priceCol.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
 
         TableColumn<ItemQueue, Void> actionCol = new TableColumn<>("Actions");
@@ -98,7 +101,7 @@ public class ApproveItemView {
                 }
             };
         actionCol.setCellFactory(cellFactory);
-        tableView.getColumns().addAll(itemNameCol, itemSizeCol, priceCol, actionCol);
+        tableView.getColumns().addAll(itemNameCol, itemCategoryCol, itemSizeCol, priceCol, actionCol);
 
         VBox vBox = new VBox(10, backBtn, tableView);
 

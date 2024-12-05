@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -21,11 +22,21 @@ import validators.ItemValidator;
 public class UploadItemView {
 
     public void show(Stage primaryStage) {
+    	BorderPane border = new BorderPane();
+    	Button backBTN = new Button("Back");
+    	backBTN.setOnAction(e -> {
+    		new HomeView().show(primaryStage);
+    	});
+    	
+    	border.setTop(backBTN);
+    	
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(20));
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setAlignment(Pos.CENTER);
+        
+        border.setCenter(grid);
 
         Label nameLabel = new Label("Item Name:");
         TextField nameField = new TextField();
@@ -121,7 +132,7 @@ public class UploadItemView {
             }
         });
 
-        Scene scene = new Scene(grid, 400, 300);
+        Scene scene = new Scene(border, 400, 300);
         primaryStage.setTitle("Upload Item");
         primaryStage.setScene(scene);
         primaryStage.show();

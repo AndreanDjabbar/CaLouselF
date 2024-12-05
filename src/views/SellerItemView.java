@@ -35,16 +35,16 @@ public class SellerItemView extends Application {
 
         TableView<Item> tableView = new TableView<>(data);
 
-        TableColumn<Item, String> itemNameCol = new TableColumn<>("Name");
+        TableColumn<Item, String> itemNameCol = new TableColumn<>("Item Name");
         itemNameCol.setCellValueFactory(new PropertyValueFactory<>("itemName"));
 
-        TableColumn<Item, String> itemCategoryCol = new TableColumn<>("Category");
+        TableColumn<Item, String> itemCategoryCol = new TableColumn<>("Item Category");
         itemCategoryCol.setCellValueFactory(new PropertyValueFactory<>("itemCategory"));
 
-        TableColumn<Item, String> itemSizeCol = new TableColumn<>("Size");
+        TableColumn<Item, String> itemSizeCol = new TableColumn<>("Item Size");
         itemSizeCol.setCellValueFactory(new PropertyValueFactory<>("itemSize"));
 
-        TableColumn<Item, Double> priceCol = new TableColumn<>("Price");
+        TableColumn<Item, Double> priceCol = new TableColumn<>("Item Price");
         priceCol.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
         
         TableColumn<Item, Double> statusCol = new TableColumn<>("Status");
@@ -108,6 +108,7 @@ public class SellerItemView extends Application {
 
         actionCol.setCellFactory(cellFactory);
         tableView.getColumns().addAll(itemNameCol, itemCategoryCol, itemSizeCol, priceCol, statusCol, actionCol);
+        
 
         Button backBtn = new Button("Back");
         backBtn.setOnAction(event -> {
