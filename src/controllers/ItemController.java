@@ -18,14 +18,15 @@ public class ItemController {
         db = Database.getInstance();
     }
 
-	public String uploadItemToQueue(int sellerId, String itemName, String itemCategory , String itemSize, String itemPrice) {
+	public String uploadItemToQueue(ItemQueue itemQueue) {
         try {
+        	String itemPrice = itemQueue.getItemPrice().toString();
             String query = "INSERT INTO itemsQueue (seller_id, item_name, item_category, item_size, item_price) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement ps = db.prepareStatement(query);
-            ps.setInt(1, sellerId);
-            ps.setString(2, itemName);
-            ps.setString(3, itemCategory);
-            ps.setString(4, itemSize);
+            ps.setInt(1, itemQueue.getSellerId());
+            ps.setString(2, itemQueue.getItemName());
+            ps.setString(3, itemQueue.getItemCategory());
+            ps.setString(4, itemQueue.getItemSize());
             ps.setString(5, itemPrice);
             ps.executeUpdate();
             return "Success Upload Item!.. Please wait for admin approvement";

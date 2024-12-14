@@ -11,6 +11,7 @@ import database.Database;
 import models.Item;
 import models.ItemQueue;
 import models.Offer;
+import models.Transaction;
 import models.TransactionHistory;
 
 public class TransactionController {
@@ -20,19 +21,19 @@ public class TransactionController {
         db = Database.getInstance();
     }
     
-    public String recordTransactions(int userId, int sellerId, int itemId, String itemName, String itemSize, BigDecimal itemPrice, String itemCategory, BigDecimal totalPaid) {
+    public String recordTransactions(Transaction newTransaction) {
         String query = "INSERT INTO transactions (user_id, seller_id, item_id, item_name, item_size, item_price, item_category, total_paid) "
                      + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement ps = db.prepareStatement(query)) {
-            ps.setInt(1, userId);
-            ps.setInt(2, sellerId);
-            ps.setInt(3, itemId);
-            ps.setString(4, itemName);      
-            ps.setString(5, itemSize);      
-            ps.setBigDecimal(6, itemPrice); 
-            ps.setString(7, itemCategory);
-            ps.setBigDecimal(8, totalPaid); 
+            ps.setInt(1, newTransaction.getUserId());
+            ps.setInt(2, newTransaction.getSellerId());
+            ps.setInt(3, newTransaction.getItemId());
+            ps.setString(4, newTransaction.getItemName());      
+            ps.setString(5, newTransaction.getItemSize());      
+            ps.setBigDecimal(6, newTransaction.getItemPrice()); 
+            ps.setString(7, newTransaction.getItemCategory());
+            ps.setBigDecimal(8, newTransaction.getTotalPaid()); 
             
             ps.executeUpdate();
             return "Transaction recorded successfully!";
@@ -56,13 +57,13 @@ public class TransactionController {
         return BigDecimal.ZERO; 
     }
 
-    public String makeOffer(int userId, int sellerId, int itemId, BigDecimal offerPrice) {
+    public String makeOffer(Offer newOffer) {
         String query = "INSERT INTO offers (user_id, seller_id, item_id, offer_price) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = db.prepareStatement(query)) {
-            ps.setInt(1, userId);
-            ps.setInt(2, sellerId);
-            ps.setInt(3, itemId);
-            ps.setBigDecimal(4, offerPrice);
+            ps.setInt(1, newOffer.getUserId());
+            ps.setInt(2, newOffer.getSellerId());
+            ps.setInt(3, newOffer.getItemId());
+            ps.setBigDecimal(4, newOffer.getOfferPrice());
             ps.executeUpdate();
             return "Offer successfully recorded!";
         } catch (SQLException e) {
@@ -85,12 +86,12 @@ public class TransactionController {
         return false; 
     }
     
-    public String updateOffer(int userId, int itemId, BigDecimal newOffer) {
+    public String updateOffer(Offer offer) {
         String query = "UPDATE offers SET offer_price = ? WHERE user_id = ? AND item_id = ?";
         try (PreparedStatement ps = db.prepareStatement(query)) {
-            ps.setBigDecimal(1, newOffer);
-            ps.setInt(2, userId);
-            ps.setInt(3, itemId);
+            ps.setBigDecimal(1, offer.getItemPrice());
+            ps.setInt(2, offer.getUserId());
+            ps.setInt(3, offer.getItemId());
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 return "Offer successfully updated!";

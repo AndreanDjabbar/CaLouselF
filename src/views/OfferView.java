@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Item;
 import models.Offer;
+import models.Transaction;
 import utils.SessionManager;
 
 import java.math.BigDecimal;
@@ -85,6 +86,7 @@ public class OfferView {
 
                     TransactionController transactionController = new TransactionController();
                     String transactionResult = transactionController.recordTransactions(
+                    	new Transaction(
                         selectedOffer.getUserId(),
                         selectedOffer.getSellerId(),
                         item.getItemId(),
@@ -92,7 +94,7 @@ public class OfferView {
                         item.getItemSize(),
                         item.getItemPrice(),
                         item.getItemCategory(),
-                        selectedOffer.getOfferPrice()
+                        selectedOffer.getOfferPrice())
                     );
 
                     if (!transactionResult.contains("successfully")) {
@@ -101,7 +103,7 @@ public class OfferView {
                     }
 
                     WishlistController wishlistController = new WishlistController();
-                    wishlistController.removeItemFromWishlist(userId, selectedOffer.getItemId());
+                    wishlistController.removeItemFromWishlist(selectedOffer.getItemId());
                     itemController.purchasedItem(selectedOffer.getItemId());
 
                     String deleteResult = transactionController.deleteOffer(selectedOffer.getItemId(), selectedOffer.getUserId());

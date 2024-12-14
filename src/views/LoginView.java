@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import models.User;
 import utils.SessionManager;
 import javafx.scene.control.Hyperlink;
 import javafx.geometry.Pos;
@@ -61,8 +62,8 @@ public class LoginView {
             }
 
             UserController userController = new UserController();
-            String result = userController.userLogin(username, password);
-            System.out.println(result);
+            String result = userController.userLogin(new User(username, password));
+            
             if (result.equalsIgnoreCase("Login successful")) {
                 errorLabel.setText("Login successful!");
                 errorLabel.setTextFill(Color.GREEN); 

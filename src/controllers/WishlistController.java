@@ -96,12 +96,11 @@ public class WishlistController {
         }
     }
     
-    public void removeItemFromWishlist(int userId, int itemId) {
-        String query = "DELETE FROM wishlists WHERE user_id = ? AND item_id = ?";
+    public void removeItemFromWishlist(int itemId) {
+        String query = "DELETE FROM wishlists WHERE item_id = ?";
         
         try (PreparedStatement ps = db.prepareStatement(query)) {
-            ps.setInt(1, userId);
-            ps.setInt(2, itemId);
+            ps.setInt(1, itemId);
             
             int rowsDeleted = ps.executeUpdate();
             

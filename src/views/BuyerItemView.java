@@ -16,6 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Item;
+import models.Offer;
+import models.Transaction;
 import utils.SessionManager;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -120,25 +122,38 @@ public class BuyerItemView extends Application {
         String username = SessionManager.getInstance().getUsername();
         int userId = userController.getIdByUsername(username);
 
-        String transactionResult = transactionController.recordTransactions(userId, item.getSellerId(), item.getItemId(), item.getItemName(), item.getItemSize(), item.getItemPrice(), item.getItemCategory(), item.getItemPrice());
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirm Purchase");
+        confirmationAlert.setHeaderText("Are you sure you want to purchase this item?");
+        confirmationAlert.setContentText("Item: " + item.getItemName() + "\nPrice: " + item.getItemPrice());
 
-        if ("Transaction recorded successfully!".equals(transactionResult)) {
-            wishlistController.removeItemFromWishlist(userId, item.getItemId());
+        confirmationAlert.showAndWait().ifPresent(response -> {
+            if (response.getText().equalsIgnoreCase("OK")) {
+                Transaction transaction = new Transaction(userId, item.getSellerId(), item.getItemId(), item.getItemName(), item.getItemSize(), item.getItemPrice(), item.getItemCategory(), item.getItemPrice());
+                String transactionResult = transactionController.recordTransactions(transaction);
 
-            String purchasedResult = itemController.purchasedItem(item.getItemId());
-            if ("Item status successfully updated to 'purchased'.".equals(purchasedResult)) {
-                showAlert("Transaction Status", "Purchase Successful", 
-                          "You have successfully purchased: " + item.getItemName());
-                refreshItemList();
+                if ("Transaction recorded successfully!".equals(transactionResult)) {
+                    wishlistController.removeItemFromWishlist(item.getItemId());
+
+                    String purchasedResult = itemController.purchasedItem(item.getItemId());
+                    if ("Item status successfully updated to 'purchased'.".equals(purchasedResult)) {
+                        showAlert("Transaction Status", "Purchase Successful", 
+                                  "You have successfully purchased: " + item.getItemName());
+                        refreshItemList();
+                    } else {
+                        showAlert("Purchase Failed", "Error updating item status", purchasedResult);
+                    }
+                } else {
+                    showAlert("Transaction Failed", "Purchase Failed", "Error: " + transactionResult);
+                }
+
+                System.out.println("Purchased: " + item.getItemName());
             } else {
-                showAlert("Purchase Failed", "Error updating item status", purchasedResult);
+                System.out.println("Purchase canceled by user.");
             }
-        } else {
-            showAlert("Transaction Failed", "Purchase Failed", "Error: " + transactionResult);
-        }
-
-        System.out.println("Purchased: " + item.getItemName());
+        });
     }
+
 
     private void showAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -196,9 +211,9 @@ public class BuyerItemView extends Application {
                 String result;
                 
                 if (hasExistingOffer) {
-                    result = transactionController.updateOffer(userId, item.getItemId(), offer);
+                    result = transactionController.updateOffer(new Offer(userId, item.getItemId(), offer));
                 } else {
-                    result = transactionController.makeOffer(userId, item.getSellerId(), item.getItemId(), offer);
+                    result = transactionController.makeOffer(new Offer(userId, item.getSellerId(), item.getItemId(), offer));
                 }
 
                 if (result.contains("successfully")) {

@@ -16,19 +16,19 @@ public class UserController {
         db = Database.getInstance();
     }
 
-    public String registerUser(String username, String password, String phoneNumber, String address, String role) {
-    	if (isUserExists(username)) {
+    public String registerUser(User newUser) {
+    	if (isUserExists(newUser.getUsername())) {
     		return "Username Already Exist";
     	}
     	
         try {
             String query = "INSERT INTO users (username, password, phone_number, address, role) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement ps = db.prepareStatement(query);
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ps.setString(3, phoneNumber);
-            ps.setString(4, address);
-            ps.setString(5, role);
+            ps.setString(1, newUser.getUsername());
+            ps.setString(2, newUser.getPassword());
+            ps.setString(3, newUser.getPhoneNumber());
+            ps.setString(4, newUser.getAddress());
+            ps.setString(5, newUser.getRole());
             ps.executeUpdate();
             return "User successfully registered!";
         } catch (SQLException e) {
@@ -39,20 +39,20 @@ public class UserController {
         }
     }
     
-    public String userLogin(String username, String password) {
-    	if (username.equalsIgnoreCase("admin") && password.equalsIgnoreCase("admin")) {
+    public String userLogin(User userData) {
+    	if (userData.getUsername().equalsIgnoreCase("admin") && userData.getPassword().equalsIgnoreCase("admin")) {
     		return "Login Successful";
     	}
         String query = "SELECT password FROM users WHERE username = ?";
         
         try (PreparedStatement ps = db.prepareStatement(query)) {
-            ps.setString(1, username);  
+            ps.setString(1, userData.getUsername());  
             
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String storedPasswordHash = rs.getString("password");
                     
-                    if (password.equals(storedPasswordHash)) {
+                    if (userData.getPassword().equals(storedPasswordHash)) {
                         return "Login successful";
                     } else {
                         return "Invalid username or password";

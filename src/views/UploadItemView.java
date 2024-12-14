@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import models.ItemQueue;
 import utils.SessionManager;
 import validators.ItemValidator;
 
@@ -117,7 +118,8 @@ public class UploadItemView {
                 return;
             }
             
-            String result = itemController.uploadItemToQueue(sellerId, itemName, itemCategory, itemSize, itemPrice);
+            price = new BigDecimal(itemPrice);
+            String result = itemController.uploadItemToQueue(new ItemQueue(sellerId, itemName, itemSize, price, itemCategory));
             
             errorLabel.setText(result);
             if (result.contains("Success Upload Item!.. Please wait for admin approvement")) {

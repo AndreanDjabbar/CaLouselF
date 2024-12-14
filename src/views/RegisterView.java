@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import models.User;
 import validators.UserValidator;
 
 public class RegisterView {
@@ -109,7 +110,7 @@ public class RegisterView {
             }
 
             UserController userController = new UserController();
-            String result = userController.registerUser(username, password, phoneNumber, address, role);
+            String result = userController.registerUser(new User(username, password, phoneNumber, address, role));
 
             if (result.equalsIgnoreCase("Username Already Exist")) {
                 errorLabel.setText(result);

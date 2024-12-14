@@ -12,7 +12,7 @@ public class Offer {
     private String buyerName; 
     private String itemName; 
     private BigDecimal itemPrice; 
-
+    
     public Offer(Integer offerId, Integer userId, Integer sellerId, Integer itemId, BigDecimal offerPrice) {
         this.offerId = offerId;
         this.userId = userId;
@@ -24,7 +24,7 @@ public class Offer {
     
     
     public Offer(Integer offerId, Integer userId, Integer sellerId, Integer itemId, BigDecimal offerPrice,
-			String buyerName, String itemName, BigDecimal itemPrice) {
+		String buyerName, String itemName, BigDecimal itemPrice) {
 		super();
 		this.offerId = offerId;
 		this.userId = userId;
@@ -35,7 +35,19 @@ public class Offer {
 		this.itemName = itemName;
 		this.itemPrice = itemPrice;
 	}
+    
+    public Offer(int userId, int itemId, BigDecimal newOffer) {
+    	this.userId = userId;
+    	this.itemId = itemId;
+    	this.offerPrice = newOffer;
+    }
 
+    public Offer(int userId, int sellerId, int itemId, BigDecimal newOffer) {
+    	this.userId = userId;
+    	this.sellerId = sellerId;
+    	this.itemId = itemId;
+    	this.offerPrice = newOffer;
+    }
 
 
 	public String getBuyerName() {

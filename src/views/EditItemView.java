@@ -75,7 +75,6 @@ public class EditItemView {
 
             errorLabel.setText("");
 
-            // Validasi data menggunakan ItemValidator
             String errorMessage = ItemValidator.validateItemName(itemName);
             if (errorMessage != null) {
                 errorLabel.setText(errorMessage);

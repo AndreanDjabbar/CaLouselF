@@ -23,6 +23,14 @@ public class ItemQueue {
         this.itemCategory = itemCategory;
     }
     
+    public ItemQueue(int sellerId, String itemName, String itemSize, BigDecimal itemPrice, String itemCategory) {
+    	this.sellerId = sellerId;
+    	this.itemName = itemName;
+    	this.itemSize = itemSize;
+    	this.itemPrice = itemPrice;
+    	this.itemCategory = itemCategory;
+    }
+    
     public int getItemId() {return itemId; }
     public String getItemName() { return itemName; }
     public String getItemSize() { return itemSize; }
